@@ -32,19 +32,18 @@ public:
 				continue;
 			}
 			for (int i = 0; i < end.length(); i++) {
-				char origin = word_node->word[i];
 				for (char c = 'a'; c <= 'z'; c++) {
-					if (origin == c)
+					string temp = word_node->word;
+					if (temp[i] == c)
 						continue;
-					word_node->word[i] = c;
-					if (dict.find(word_node->word) != dict.end()) {
-						if (table.find(word_node->word) == table.end())
-							table[word_node->word] = word_node->dist + 1;
-						if (table[word_node->word] == word_node->dist + 1)
-							q.push(new WordNode(word_node->word, word_node->dist + 1, word_node));
+					temp[i] = c;
+					if (dict.find(temp) != dict.end()) {
+						if (table.find(temp) == table.end())
+							table[temp] = word_node->dist + 1;
+						if (table[temp] == word_node->dist + 1)
+							q.push(new WordNode(temp, word_node->dist + 1, word_node));
 					}
 				}
-				word_node->word[i] = origin;
 			}
 		}
         return ret;
