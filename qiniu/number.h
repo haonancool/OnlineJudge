@@ -13,8 +13,9 @@ public:
 	std::string toString() const;
 
 private:
-	std::vector<int> intpart_;
-	std::vector<int> frac_;
+
+	std::vector<int> integral_;
+	std::vector<int> fraction_;
 	int base_;
 };
 
