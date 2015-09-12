@@ -2,6 +2,7 @@
 #include <sstream>
 #include <string>
 #include "number.h"
+#include "helper.h"
 
 using namespace std;
 
@@ -18,5 +19,7 @@ int main() {
 	ss.str(line);
 	ss >> str >> base;
 	Number rhs(str, base);
+	lhs += rhs;
+	cout << lhs.toString() << " " << lhs.getBase() << endl;
 	return 0;
 }

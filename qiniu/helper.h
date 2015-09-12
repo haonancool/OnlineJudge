@@ -33,12 +33,15 @@ inline int gcd(int a, int b) {
 
 inline int lcm(int a, int b) {
 	int c = gcd(a, b);
-	return a * b / c;
+	return a / c * b;
 }
 
-std::vector<int> transformDigit(int n, int ith, int oldBase, int newBase);
-void addOne(std::vector<int> &vec, int ith);
-void addIntegral(std::vector<int> &lhs, const std::vector<int> &rhs);
-int addFraction(std::vector<int> &lhs, const std::vector<int> &rhs);
+void addOne(std::vector<int> &vec, int base, int ith);
+
+void addIntegral(std::vector<int> &lhs, const std::vector<int> &rhs, int base);
+
+std::vector<int> transformDigit(int digit, int ith, int oldBase, int newBase);
+
+int addFraction(std::vector<int> &lhs, const std::vector<int> &rhs, int base);
 
 #endif // HELPER_H

@@ -1,41 +1,9 @@
 #include "number.h"
+#include "helper.h"
 #include <sstream>
 #include <algorithm>
 
 using namespace std;
-
-inline int toDigit(char c) {
-	if (c >= '0' && c <= '9')
-		return c - '0';
-	else if (c >= 'a' && c <= 'z')
-		return c - 'a' + 10;
-	else if (c >= 'A' && c <= 'Z')
-		return c - 'A' + 36;
-	return 0;
-}
-
-inline char toAlpha(int n) {
-	if (n >= 0 && n <= 9)
-		return '0' + n;
-	else if (n >= 10 && n <= 35)
-		return 'a' + n - 10;
-	else
-		return 'A' + n - 36;
-}
-
-inline int gcd(int a, int b) {
-	while (b) {
-		int tmp = b;
-		b = a % b;
-		a = tmp;
-	}
-	return a;
-}
-
-inline int lcm(int a, int b) {
-	int c = gcd(a, b);
-	return a * b / c;
-}
 
 Number::Number(const string &str, int base)
 	: base_(base) {
@@ -114,30 +82,32 @@ Number& Number::operator+=(const Number &rhs) {
 	int newBase = lcm(base_, other.base_);
 	toBase(newBase);
 	other.toBase(newBase);
+	addIntegral(integral_, other.integral_, newBase);
+	int carry = addFraction(fraction_, other.fraction_, newBase);
+	if (carry)
+		addOne(integral_, newBase, 0);
+	return *this;
 }
 
 void Number::toBase(int base) {
 	if (base_ == base)
 		return;
-	reverse(integral_.begin(), integral_.end());
 	vector<int> newIntegral;
+	reverse(integral_.begin(), integral_.end());
 	for (int i = 0; i < integral_.size(); i++) {
-		vector<int> tmp;
-		tmp.push_back(integral_[i]);
-		for (int j = 0; j < i; j++) {
-			int size = tmp.size();
-			for (int k = 0; k < size; k++) {
-				tmp[k] *= base_;
-				int m = k;
-				while (tmp[m] >= base) {
-					tmp[m] -= base;
-					if (m == tmp.size() - 1)
-						tmp.push_back(1);
-					else
-						tmp[m + 1]++;
-					m++;
-				}
-			}
-		}
+		vector<int> tmp = transformDigit(integral_[i], i, base_, base);
+		addIntegral(newIntegral, tmp, base);
 	}
+	integral_ = newIntegral;
+	vector<int> newFration;
+	for (int i = 0; i < fraction_.size(); i++) {
+		vector<int> tmp = transformDigit(fraction_[i], i + 1, base / base_, base);
+		reverse(tmp.begin(), tmp.end());
+		while (tmp.size() < i + 1)
+			tmp.push_back(0);
+		reverse(tmp.begin(), tmp.end());
+		addFraction(newFration, tmp, base);
+	}
+	fraction_ = newFration;
+	base_ = base;
 }
