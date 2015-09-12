@@ -1,4 +1,4 @@
-CXX = g++
+CXX = clang++
 
 test : test.o number.o helper.o
 	$(CXX) -o test test.o number.o helper.o

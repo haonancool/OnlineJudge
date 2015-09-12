@@ -13,7 +13,6 @@ public:
 	std::string toString() const;
 
 private:
-
 	std::vector<int> integral_;
 	std::vector<int> fraction_;
 	int base_;
