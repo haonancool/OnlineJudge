@@ -5,7 +5,12 @@ class Solution(object):
         :type denominator: int
         :rtype: str
         """
-        ret = str(numerator/denominator)
+        if numerator * denominator < 0:
+            sign = '-'
+        else:
+            sign = ''
+        numerator, denominator = abs(numerator), abs(denominator)
+        ret = sign+str(numerator/denominator)
         carry = numerator%denominator
         if carry == 0:
             return ret
@@ -16,7 +21,7 @@ class Solution(object):
             carry *= 10
             if carry in table:
                 i = table[carry]
-                digits[carry:] = ['(']+digits[carry:]+[')']
+                digits[i:] = ['(']+digits[i:]+[')']
                 break
             else:
                 table[carry] = i
@@ -25,3 +30,8 @@ class Solution(object):
             carry %= denominator
             i += 1
         ret = ret + '.' + ''.join(digits)
+        return ret
+
+if __name__ == '__main__':
+    sol = Solution()
+    print sol.fractionToDecimal(-50, 8)
